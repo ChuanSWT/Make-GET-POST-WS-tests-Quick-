@@ -43,9 +43,10 @@ void Widget::on_postButton_clicked()
     QJsonDocument doc(jsonObj);
     QByteArray postData = doc.toJson();
     QNetworkReply *reply = manager->post(request, postData);
-    /*QEventLoop loop;
+    //等待完成
+    QEventLoop loop;
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();*/
+    loop.exec();
     QByteArray response = reply->readAll();
     ui->postInputer->append("respond :"+response);
 }
