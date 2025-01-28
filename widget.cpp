@@ -31,23 +31,34 @@ void Widget::on_getButton_clicked()
 
 void Widget::on_postButton_clicked()
 {
-    QString num1=ui->postData_1->toPlainText();
-    QString num2=ui->postData_2->toPlainText();
-    QUrl url=ui->postOuputer->toPlainText();
+    QVector<QString> str_keys;
+    QVector<QString> str_values;
+    for(int i=0;i<keys.size();++i){
+        str_keys.push_back(keys[i]->toPlainText());
+        str_values.push_back(values[i]->toPlainText());
+    }
+}
 
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    QJsonObject jsonObj;
-    jsonObj["num1"]=num1;
-    jsonObj["num2"]=num2;
-    QJsonDocument doc(jsonObj);
-    QByteArray postData = doc.toJson();
-    QNetworkReply *reply = manager->post(request, postData);
-    //等待完成
-    QEventLoop loop;
-    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
-    QByteArray response = reply->readAll();
-    ui->postInputer->append("respond :"+response);
+
+void Widget::on_addButton_clicked()
+{
+    QPlainTextEdit *newKey=new QPlainTextEdit(this);
+    QPlainTextEdit *newValue=new QPlainTextEdit(this);
+    ui->formLayout->addRow(newKey,newValue);
+    newKey->setMaximumWidth(100);
+    keys.push_back(newKey);
+    values.push_back(newValue);
+}
+
+
+void Widget::on_deleteButton_clicked()
+{
+    for(int i=0;i<keys.size();++i){
+        ui->formLayout->removeRow(0);
+        delete keys[i];
+        delete values[i];
+    }
+    keys.clear();
+    values.clear();
 }
 

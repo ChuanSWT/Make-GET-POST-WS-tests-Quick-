@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QPlainTextEdit>
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class Widget;
@@ -24,8 +25,14 @@ private slots:
 
     void on_postButton_clicked();
 
+    void on_addButton_clicked();
+
+    void on_deleteButton_clicked();
+
 private:
     Ui::Widget *ui;
     QNetworkAccessManager *manager;
+    QVector<QPlainTextEdit*> keys;
+    QVector<QPlainTextEdit*> values;
 };
 #endif // WIDGET_H
