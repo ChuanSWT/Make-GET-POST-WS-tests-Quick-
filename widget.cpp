@@ -25,7 +25,8 @@ void Widget::on_getButton_clicked()
     loop.exec();
     // 处理响应
     QByteArray response = reply->readAll();
-    ui->getInputer->append("response :"+response+"\n");
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    ui->getInputer->append(currentDateTime.toString("yyyy-MM-dd HH:mm:ss.zzz")+"response :"+response+"\n");
 }
 
 
@@ -37,6 +38,24 @@ void Widget::on_postButton_clicked()
         str_keys.push_back(keys[i]->toPlainText());
         str_values.push_back(values[i]->toPlainText());
     }
+    QString url=ui->postOuputer->toPlainText();
+    qDebug()<<url<<Qt::endl;
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QJsonObject jsonObj;
+    for(int i=0;i<str_keys.size();++i){
+        jsonObj[str_keys[i]]=str_values[i];
+    }
+    QJsonDocument doc(jsonObj);
+    QByteArray postData = doc.toJson();
+    QNetworkReply *reply = manager->post(request, postData);
+    //等待完成
+    QEventLoop loop;
+    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+    QByteArray response = reply->readAll();
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    ui->postInputer->append(currentDateTime.toString("yyyy-MM-dd HH:mm:ss.zzz")+"respond :"+response);
 }
 
 

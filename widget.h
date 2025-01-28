@@ -1,5 +1,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
+#include<QDebug>
+#include <QDateTime>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QWidget>
